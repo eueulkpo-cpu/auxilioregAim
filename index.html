@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Aimbot UI</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at top, #0b1a2a, #050b14);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    .card {
+      width: 320px;
+      border-radius: 20px;
+      padding: 20px;
+      background: linear-gradient(180deg, rgba(10,30,60,0.8), rgba(5,10,20,0.9));
+      border: 2px solid #1e90ff;
+      box-shadow: 0 0 25px #1e90ff50;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #3da9ff;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 15px;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 12px 0;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    /* Toggle */
+    .switch {
+      position: relative;
+      width: 40px;
+      height: 20px;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      background: #555;
+      border-radius: 20px;
+      width: 100%;
+      height: 100%;
+      transition: 0.3s;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      top: 2px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    input:checked + .slider {
+      background: #3da9ff;
+    }
+
+    input:checked + .slider::before {
+      transform: translateX(20px);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 10px;
+      color: #777;
+    }
+
+    .brand {
+      color: #3da9ff;
+      font-weight: bold;
+    }
+
+    .close {
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    .close:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    
+    <div class="header">
+      <span>⚙️</span>
+      <span class="close" onclick="fechar()">✖</span>
+    </div>
+
+    <div class="title">AIMBOT</div>
+    <div class="subtitle">Configurações de mira e precisão</div>
+
+    <div class="item">
+      Legit
+      <label class="switch">
+        <input type="checkbox" onclick="toggle('Legit')">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="item">
+      Retirar Input Lag
+      <label class="switch">
+        <input type="checkbox" onclick="toggle('Input Lag')">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="item">
+      Diminuir Recuo
+      <label class="switch">
+        <input type="checkbox" onclick="toggle('Recuo')">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="footer">
+      Todos os direitos reservados<br>
+      <span class="brand">@chpias</span>
+    </div>
+
+  </div>
+
+  <script>
+    function toggle(nome) {
+      console.log(nome + " ativado/desativado");
+    }
+
+    function fechar() {
+      document.querySelector(".card").style.display = "none";
+    }
+
+    </script>
+
+  <script src="Legit.cpp"></script>
+
+  
+
+</body>
+</html>
