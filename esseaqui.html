@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Mira para Jogo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #333;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        #maxYValue {
+            min-width: 40px;
+            text-align: center;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            text-align: center;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button.inactive-btn {
+            background-color: #666;
+        }
+
+        button.inactive-btn:hover {
+            background-color: #555;
+        }
+
+        .status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .active {
+            background-color: #00ff001a;
+            color: #4CAF50;
+            border: 1px solid #4CAF50;
+        }
+
+        .inactive {
+            background-color: #ff00001a;
+            color: #ff6666;
+            border: 1px solid #ff6666;
+        }
+
+        .log-area {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background-color: #222;
+            border-radius: 5px;
+            max-height: 100px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .log-area p {
+            margin: 2px 0;
+        }
+
+        .log-area .highlight {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Controle de Mira</h1>
+        
+        <div class="control-group">
+            <label for="maxY">Limite de Altura da Mira:</label>
+            <div class="range-container">
+                <input type="range" id="maxY" min="100" max="500" value="300" step="10">
+                <span id="maxYValue">300</span>
+            </div>
+        </div>
+
+        <button id="toggleHook">🔓 Ativar Hook</button>
+
+        <div class="status inactive" id="status">
+            ⚠️ Estado: Desativado
+        </div>
+
+        <div class="log-area" id="logArea">
+            <p>📋 Log de eventos:</p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // 1. SIMULAÇÃO DA INSTÂNCIA DO JOGO
+        // ============================================
+        const gameInstance = {
+            updateAim: function (args) {
+                const msg = `🎯 Mira atualizada: X=${args.x}, Y=${args.y}`;
+                console.log(msg);
+                addLog(msg);
+                return args;
+            }
+        };
+
+        // ============================================
+        // 2. ESTADO DO HOOK
+        // ============================================
+        let isHookActive = false;
+        let originalUpdateAim = null;
+        let maxY = 300;
+
+        // ============================================
+        // 3. ELEMENTOS DO DOM
+        // ============================================
+        const toggleButton = document.getElementById('toggleHook');
+        const maxYInput = document.getElementById('maxY');
+        const maxYValue = document.getElementById('maxYValue');
+        const statusElement = document.getElementById('status');
+        const logArea = document.getElementById('logArea');
+
+        // ============================================
+        // 4. FUNÇÃO DE LOG
+        // ============================================
+        function addLog(message) {
+            const p = document.createElement('p');
+            const timestamp = new Date().toLocaleTimeString();
+            p.textContent = `[${timestamp}] ${message}`;
+            if (message.includes('limitada')) {
+                p.style.color = '#4CAF50';
+            } else if (message.includes('ativado')) {
+                p.style.color = '#4CAF50';
+            } else if (message.includes('desativado')) {
+                p.style.color = '#ff6666';
+            }
+            logArea.appendChild(p);
+            logArea.scrollTop = logArea.scrollHeight;
+            
+            // Limita o número de logs
+            while (logArea.children.length > 20) {
+                logArea.removeChild(logArea.firstChild);
+            }
+        }
+
+        // ============================================
+        // 5. FUNÇÃO PARA ALTERNAR O HOOK
+        // ============================================
+        function toggleHook(activate) {
+            isHookActive = activate;
+            
+            if (activate) {
+                // Salva a função original se ainda não foi salva
+                if (!originalUpdateAim) {
+                    originalUpdateAim = gameInstance.updateAim;
+                }
+                
+                // Substitui a função
+                gameInstance.updateAim = function (...args) {
+                    // Se o hook estiver desativado, chama a original
+                    if (!isHookActive) {
+                        return originalUpdateAim.apply(this, args);
+                    }
+
+                    // Processa os argumentos
+                    const argObj = args[0];
+                    if (argObj && typeof argObj === 'object' && argObj.y !== undefined) {
+                        const newArgs = { ...argObj };
+                        if (newArgs.y > maxY) {
+                            const originalY = newArgs.y;
+                            newArgs.y = maxY;
+                            addLog(`⚠️ Y limitado: ${originalY} → ${maxY}`);
+                        }
+                        return originalUpdateAim.apply(this, [newArgs]);
+                    }
+                    
+                    return originalUpdateAim.apply(this, args);
+                };
+                
+                // Atualiza UI
+                toggleButton.textContent = '🔒 Desativar Hook';
+                toggleButton.classList.remove('inactive-btn');
+                statusElement.className = 'status active';
+                statusElement.textContent = '✅ Estado: Ativado';
+                addLog('🔓 Hook ativado');
+            } else {
+                // Restaura a função original
+                if (originalUpdateAim) {
+                    gameInstance.updateAim = originalUpdateAim;
+                    originalUpdateAim = null;
+                }
+                
+                // Atualiza UI
+                toggleButton.textContent = '🔓 Ativar Hook';
+                toggleButton.classList.add('inactive-btn');
+                statusElement.className = 'status inactive';
+                statusElement.textContent = '⚠️ Estado: Desativado';
+                addLog('🔒 Hook desativado');
+            }
+        }
+
+        // ============================================
+        // 6. EVENT LISTENERS
+        // ============================================
+        
+        // Atualiza o valor exibido do limite
+        maxYInput.addEventListener('input', () => {
+            maxYValue.textContent = maxYInput.value;
+        });
+
+        // Atualiza o limite quando o valor muda
+        maxYInput.addEventListener('change', () => {
+            maxY = parseInt(maxYInput.value);
+            addLog(`📏 Limite atualizado para: ${maxY}`);
+            
+            // Teste automático
+            setTimeout(() => {
+                addLog('🧪 Testando com Y=400...');
+                gameInstance.updateAim({ x: 150, y: 400 });
+                addLog('🧪 Testando com Y=200...');
+                gameInstance.updateAim({ x: 150, y: 200 });
+            }, 300);
+        });
+
+        // Alterna o estado do hook
+        toggleButton.addEventListener('click', () => {
+            toggleHook(!isHookActive);
+        });
+
+        // ============================================
+        // 7. TESTES INICIAIS
+        // ============================================
+        addLog('🚀 Sistema iniciado');
+        addLog('📌 Clique em "Ativar Hook" para começar');
+        
+        // Testes iniciais
+        setTimeout(() => {
+            addLog('🧪 Teste sem hook: Y=400');
+            gameInstance.updateAim({ x: 100, y: 400 });
+            addLog('🧪 Teste sem hook: Y=200');
+            gameInstance.updateAim({ x: 100, y: 200 });
+        }, 500);
+    </script>
+</body>
+</html>
