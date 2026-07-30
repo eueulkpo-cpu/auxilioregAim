@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Configurações</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #121212; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: #1e1e1e; padding: 20px; border-radius: 8px; width: 300px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .hidden { display: none; }
+        input { width: 100%; padding: 8px; margin: 8px 0; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button.active { background: #28a745; }
+        button.inactive { background: #dc3545; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="login-screen">
+        <h2>Autenticação</h2>
+        <input type="text" id="username" placeholder="Usuário">
+        <input type="password" id="password" placeholder="Senha">
+        <button onclick="fazerLogin()">Entrar</button>
+        <p id="login-error" style="color: red; display: none;">Credenciais inválidas!</p>
+    </div>
+
+    <div id="dashboard-screen" class="hidden">
+        <h2>Configurações</h2>
+        <p>Status do Filtro: <span id="status-text">Desativado</span></p>
+        <button id="toggle-btn" class="inactive" onclick="alternarFiltro()">Ativar Função</button>
+        <br><br>
+        <button onclick="fazerLogout()" style="background: #6c757d;">Sair</button>
+    </div>
+</div>
+
+<script>
+    // Estado do aplicativo
+    let usuarioAutenticado = false;
+    let filtroAtivo = false;
+
+    // Função de Login Simples
+    function fazerLogin() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+
+        // Validação básica simulada
+        if (user === "admin" && pass === "1234") {
+            usuarioAutenticado = true;
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('dashboard-screen').classList.remove('hidden');
+        } else {
+            document.getElementById('login-error').style.display = 'block';
+        }
+    }
+
+    // Alternar estado da função
+    function alternarFiltro() {
+        if (!usuarioAutenticado) return;
+
+        filtroAtivo = !filtroAtivo;
+        const btn = document.getElementById('toggle-btn');
+        const statusText = document.getElementById('status-text');
+
+        if (filtroAtivo) {
+            btn.innerText = "Desativar Função";
+            btn.className = "active";
+            statusText.innerText = "Ativado";
+            console.log("Filtro de entrada ativado na aplicação.");
+        } else {
+            btn.innerText = "Ativar Função";
+            btn.className = "inactive";
+            statusText.innerText = "Desativado";
+            console.log("Filtro de entrada desativado na aplicação.");
+        }
+    }
+
+    // Função de Logout
+    function fazerLogout() {
+        usuarioAutenticado = false;
+        filtroAtivo = false;
+        document.getElementById('login-screen').classList.remove('hidden');
+        document.getElementById('dashboard-screen').classList.add('hidden');
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+    }
+</script>
+
+</body>
+</html>
