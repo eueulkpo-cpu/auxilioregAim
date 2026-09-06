@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuxiloFOV</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div>
+    
+    <div class="caixa" id="telalogin">
+        <h1>GERADOR KEY</h1>
+        <input type="text" id="usuario" placeholder="Usuário">
+        <input type="password" id="senha" placeholder="Senha">
+        <button id="login">LOGIN</button>
+    </div>
+
+      <div class="container" id="telaprincipal" style="display: none;">
+
+        <div class="logo">KYZEN77</div>
+        <div class="subtitle">Painel de geração de keys</div>
+
+        <label for="validade">Validade da key</label>
+
+        <select id="validade">
+            <option value="1">1 dia</option>
+            <option value="7">7 dias</option>
+            <option value="30" selected>30 dias</option>
+            <option value="365">1 ano</option>
+        </select>
+
+        <button onclick="gerarKey()">
+            GERAR KEY
+        </button>
+
+        <div class="resultado" id="resultado">
+
+            <span>KEY GERADA</span>
+
+            <div class="key" id="keyGerada"></div>
+
+            <button class="copiar" onclick="copiarKey()">
+                COPIAR KEY
+            </button>
+
+        </div>
+
+        <div class="status" id="status">
+            Sistema pronto
+        </div>
+
+    </div>
+
+    
+</body>
+<script src="script.js"></script>
+<script src="gerakey.js"></script>
+
+
+</html>
