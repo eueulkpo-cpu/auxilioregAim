@@ -1,0 +1,19 @@
+{
+  "name": "key-management-system",
+  "version": "1.0.0",
+  "description": "Sistema de gerenciamento de Keys de licenca com painel admin e API de validacao",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "create-admin": "node scripts/create-admin.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "express-session": "^1.18.0",
+    "helmet": "^7.1.0"
+  }
+}
