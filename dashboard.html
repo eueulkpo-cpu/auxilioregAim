@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Dashboard - Gerenciamento de Keys</title>
+<link rel="stylesheet" href="/admin/static/css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Gerenciamento de Keys</h1>
+    <button id="logoutBtn" class="btn btn-secondary">Sair</button>
+  </header>
+
+  <main class="container">
+
+    <section class="counters">
+      <div class="counter-card counter-livre">
+        <span class="counter-value" id="countLivre">0</span>
+        <span class="counter-label">Livres</span>
+      </div>
+      <div class="counter-card counter-ativada">
+        <span class="counter-value" id="countAtivada">0</span>
+        <span class="counter-label">Ativadas</span>
+      </div>
+      <div class="counter-card counter-expirada">
+        <span class="counter-value" id="countExpirada">0</span>
+        <span class="counter-label">Expiradas</span>
+      </div>
+      <div class="counter-card counter-revogada">
+        <span class="counter-value" id="countRevogada">0</span>
+        <span class="counter-label">Revogadas</span>
+      </div>
+    </section>
+
+    <section class="generate-panel">
+      <h2>Gerar novas Keys</h2>
+      <div class="generate-row">
+        <select id="planSelect">
+          <option value="1d">1 dia</option>
+          <option value="7d">7 dias</option>
+          <option value="30d" selected>30 dias</option>
+          <option value="90d">90 dias</option>
+          <option value="permanent">Permanente</option>
+        </select>
+        <input type="number" id="quantityInput" min="1" max="100" value="1" title="Quantidade">
+        <button id="generateBtn" class="btn btn-primary">Gerar Key</button>
+      </div>
+      <p id="generateMsg" class="hint-msg" hidden></p>
+    </section>
+
+    <section class="list-panel">
+      <div class="list-toolbar">
+        <input type="text" id="searchInput" placeholder="Pesquisar por Key...">
+        <select id="statusFilter">
+          <option value="">Todos os status</option>
+          <option value="livre">Livre</option>
+          <option value="ativada">Ativada</option>
+          <option value="expirada">Expirada</option>
+          <option value="revogada">Revogada</option>
+        </select>
+        <button id="refreshBtn" class="btn btn-secondary">Atualizar</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="keysTable">
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Status</th>
+              <th>Validade</th>
+              <th>Criada em</th>
+              <th>Ativada em</th>
+              <th>Expira em</th>
+              <th>Dispositivo</th>
+              <th>Acoes</th>
+            </tr>
+          </thead>
+          <tbody id="keysTableBody">
+            <!-- preenchido via JS -->
+          </tbody>
+        </table>
+        <p id="emptyMsg" class="hint-msg" hidden>Nenhuma Key encontrada.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/admin/static/js/dashboard.js"></script>
+</body>
+</html>
